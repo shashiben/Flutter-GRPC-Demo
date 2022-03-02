@@ -1,0 +1,15 @@
+syntax = "proto3";
+
+service StudentService{
+    rpc createStudent(Student) returns(Student){};
+    rpc updateStudent(Student) returns(Student){};
+    rpc getStudentById(Student) returns(Student){};
+    rpc deleteStudentById(Student) returns(Empty){};
+
+}
+
+message Student{
+    int32 id=1;
+    string name=2;
+    int32 category=3;
+}message Empty {}
