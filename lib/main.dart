@@ -1,4 +1,11 @@
+// Flutter imports:
 import 'package:flutter/material.dart';
+
+// Package imports:
+import 'package:http/http.dart' as http;
+
+// Project imports:
+import 'package:grpcassign/modules/add%20student%20module/screens/add_student_view.dart';
 
 void main() {
   runApp(const MyApp());
@@ -12,9 +19,24 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        textButtonTheme: TextButtonThemeData(
+            style: ButtonStyle(
+                textStyle: MaterialStateProperty.all(
+                    const TextStyle(fontSize: 16, color: Color(0xFF1a1a1a))))),
+        textTheme: Theme.of(context)
+            .textTheme
+            .apply(displayColor: const Color(0xFF1a1a1a)),
+        backgroundColor: const Color(0xFFFFFEFE),
+        scaffoldBackgroundColor: const Color(0xFFFFFEFE),
+        inputDecorationTheme: const InputDecorationTheme(
+            border: InputBorder.none,
+            hintStyle: TextStyle(color: Color(0xFFAA9BA1)),
+            fillColor: Color(0xFFF6F7F8),
+            filled: true),
+        primaryColor: const Color(0xFF353B40),
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      debugShowCheckedModeBanner: false,
+      home: const AddStudentView(),
     );
   }
 }
@@ -29,14 +51,6 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -47,20 +61,13 @@ class _MyHomePageState extends State<MyHomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            const Text(
-              'You have pushed the button this many times:',
-            ),
-            Text(
-              '$_counter',
-              style: Theme.of(context).textTheme.headline4,
-            ),
+            ElevatedButton(
+                onPressed: () async {
+                  await http.get(Uri.parse("http://127.0.0.1:5000"));
+                },
+                child: const Text("Click Me"))
           ],
         ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: const Icon(Icons.add),
       ),
     );
   }
