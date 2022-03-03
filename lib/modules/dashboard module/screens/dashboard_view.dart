@@ -7,6 +7,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_next/flutter_next.dart';
 import 'package:flutter_next/utils/shadows/next_shadow.dart';
 import 'package:grpcassign/modules/add%20student%20module/screens/add_student_view.dart';
+import 'package:grpcassign/modules/student%20details%20module/screens/student_details_view.dart';
 
 class DashboardView extends HookWidget {
   const DashboardView({Key? key}) : super(key: key);
@@ -45,13 +46,17 @@ class DashboardView extends HookWidget {
                               children: [
                                 Container(
                                   height: 150,
+                                  child: Hero(
+                                    tag: "ProfilePic$index",
+                                    child: Image.asset(
+                                      index % 3 == 0
+                                          ? "assets/images/female.png"
+                                          : "assets/images/male.png",
+                                      fit: BoxFit.contain,
+                                    ),
+                                  ).clipRRect(all: 8),
                                   width: double.infinity,
                                   decoration: BoxDecoration(
-                                      image: DecorationImage(
-                                          fit: BoxFit.contain,
-                                          image: AssetImage(index % 3 == 0
-                                              ? "assets/images/female.png"
-                                              : "assets/images/male.png")),
                                       color: Colors.black,
                                       borderRadius: BorderRadius.circular(8)),
                                 ),
@@ -72,18 +77,24 @@ class DashboardView extends HookWidget {
                                   ),
                                 ),
                               ],
-                            ).pad(12).container(
-                                animationDuration:
-                                    const Duration(milliseconds: 600),
-                                shouldAnimate: true,
-                                decoration: BoxDecoration(
-                                    boxShadow: isHovered
-                                        ? NextShadow.shadow400()
-                                        : null,
-                                    color: context.scaffoldBackgroundColor,
-                                    border: Border.all(
-                                        color: const Color(0xFF55595c),
-                                        width: 0.1)));
+                            )
+                                .pad(12)
+                                .container(
+                                    animationDuration:
+                                        const Duration(milliseconds: 600),
+                                    shouldAnimate: true,
+                                    decoration: BoxDecoration(
+                                        boxShadow: isHovered
+                                            ? NextShadow.shadow400()
+                                            : null,
+                                        color: context.scaffoldBackgroundColor,
+                                        border: Border.all(
+                                            color: const Color(0xFF55595c),
+                                            width: 0.1)))
+                                .onTap(() {
+                              context.navigator.push(MaterialPageRoute(
+                                  builder: (_) => const StudentDetailsView()));
+                            });
                           }),
                         )).toList()),
             const SizedBox(

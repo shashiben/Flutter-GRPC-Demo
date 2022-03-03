@@ -27,17 +27,21 @@ class StudentServiceClient extends $grpc.Client {
           ($core.List<$core.int> value) =>
               $0.ResponseMessage.fromBuffer(value));
   static final _$getStudentById =
-      $grpc.ClientMethod<$0.StudentId, $0.SerachStudentResult>(
+      $grpc.ClientMethod<$0.StudentId, $0.SearchStudentResult>(
           '/StudentService/getStudentById',
           ($0.StudentId value) => value.writeToBuffer(),
           ($core.List<$core.int> value) =>
-              $0.SerachStudentResult.fromBuffer(value));
+              $0.SearchStudentResult.fromBuffer(value));
   static final _$deleteStudentById =
       $grpc.ClientMethod<$0.StudentId, $0.ResponseMessage>(
           '/StudentService/deleteStudentById',
           ($0.StudentId value) => value.writeToBuffer(),
           ($core.List<$core.int> value) =>
               $0.ResponseMessage.fromBuffer(value));
+  static final _$getAllStudent = $grpc.ClientMethod<$0.Empty, $0.StudentList>(
+      '/StudentService/getAllStudent',
+      ($0.Empty value) => value.writeToBuffer(),
+      ($core.List<$core.int> value) => $0.StudentList.fromBuffer(value));
 
   StudentServiceClient($grpc.ClientChannel channel,
       {$grpc.CallOptions? options,
@@ -54,7 +58,7 @@ class StudentServiceClient extends $grpc.Client {
     return $createUnaryCall(_$updateStudent, request, options: options);
   }
 
-  $grpc.ResponseFuture<$0.SerachStudentResult> getStudentById(
+  $grpc.ResponseFuture<$0.SearchStudentResult> getStudentById(
       $0.StudentId request,
       {$grpc.CallOptions? options}) {
     return $createUnaryCall(_$getStudentById, request, options: options);
@@ -64,6 +68,11 @@ class StudentServiceClient extends $grpc.Client {
       $0.StudentId request,
       {$grpc.CallOptions? options}) {
     return $createUnaryCall(_$deleteStudentById, request, options: options);
+  }
+
+  $grpc.ResponseFuture<$0.StudentList> getAllStudent($0.Empty request,
+      {$grpc.CallOptions? options}) {
+    return $createUnaryCall(_$getAllStudent, request, options: options);
   }
 }
 
@@ -85,13 +94,13 @@ abstract class StudentServiceBase extends $grpc.Service {
         false,
         ($core.List<$core.int> value) => $0.Student.fromBuffer(value),
         ($0.ResponseMessage value) => value.writeToBuffer()));
-    $addMethod($grpc.ServiceMethod<$0.StudentId, $0.SerachStudentResult>(
+    $addMethod($grpc.ServiceMethod<$0.StudentId, $0.SearchStudentResult>(
         'getStudentById',
         getStudentById_Pre,
         false,
         false,
         ($core.List<$core.int> value) => $0.StudentId.fromBuffer(value),
-        ($0.SerachStudentResult value) => value.writeToBuffer()));
+        ($0.SearchStudentResult value) => value.writeToBuffer()));
     $addMethod($grpc.ServiceMethod<$0.StudentId, $0.ResponseMessage>(
         'deleteStudentById',
         deleteStudentById_Pre,
@@ -99,6 +108,13 @@ abstract class StudentServiceBase extends $grpc.Service {
         false,
         ($core.List<$core.int> value) => $0.StudentId.fromBuffer(value),
         ($0.ResponseMessage value) => value.writeToBuffer()));
+    $addMethod($grpc.ServiceMethod<$0.Empty, $0.StudentList>(
+        'getAllStudent',
+        getAllStudent_Pre,
+        false,
+        false,
+        ($core.List<$core.int> value) => $0.Empty.fromBuffer(value),
+        ($0.StudentList value) => value.writeToBuffer()));
   }
 
   $async.Future<$0.ResponseMessage> createStudent_Pre(
@@ -111,7 +127,7 @@ abstract class StudentServiceBase extends $grpc.Service {
     return updateStudent(call, await request);
   }
 
-  $async.Future<$0.SerachStudentResult> getStudentById_Pre(
+  $async.Future<$0.SearchStudentResult> getStudentById_Pre(
       $grpc.ServiceCall call, $async.Future<$0.StudentId> request) async {
     return getStudentById(call, await request);
   }
@@ -121,12 +137,19 @@ abstract class StudentServiceBase extends $grpc.Service {
     return deleteStudentById(call, await request);
   }
 
+  $async.Future<$0.StudentList> getAllStudent_Pre(
+      $grpc.ServiceCall call, $async.Future<$0.Empty> request) async {
+    return getAllStudent(call, await request);
+  }
+
   $async.Future<$0.ResponseMessage> createStudent(
       $grpc.ServiceCall call, $0.Student request);
   $async.Future<$0.ResponseMessage> updateStudent(
       $grpc.ServiceCall call, $0.Student request);
-  $async.Future<$0.SerachStudentResult> getStudentById(
+  $async.Future<$0.SearchStudentResult> getStudentById(
       $grpc.ServiceCall call, $0.StudentId request);
   $async.Future<$0.ResponseMessage> deleteStudentById(
       $grpc.ServiceCall call, $0.StudentId request);
+  $async.Future<$0.StudentList> getAllStudent(
+      $grpc.ServiceCall call, $0.Empty request);
 }

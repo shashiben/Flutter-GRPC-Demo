@@ -8,6 +8,9 @@ import 'package:flutter_next/flutter_next.dart';
 // Project imports:
 import 'package:grpcassign/common%20widgets/dropdown.dart';
 import 'package:grpcassign/common%20widgets/text_field.dart';
+import 'package:grpcassign/core/services/student_repo.dart';
+
+import '../../../core/proto_generated/students.pb.dart';
 
 class AddStudentView extends HookWidget {
   const AddStudentView({Key? key}) : super(key: key);
@@ -103,7 +106,13 @@ class AddStudentView extends HookWidget {
                         } else if (gender.value == null) {
                           error.value = "Please choose gender";
                         } else {
+                          debugPrint("Form is validated");
                           error.value = null;
+                          StudentRepo().createStudent(Student(
+                              name: nameController.text,
+                              id: int.tryParse(idController.text),
+                              dept: deptController.text,
+                              gender: gender.value));
                         }
                       },
                       child: const Text(

@@ -1,17 +1,21 @@
 // Package imports:
+import 'dart:async';
+
 import 'package:grpc/grpc.dart';
 
 // Project imports:
 import 'package:grpcassign/core/proto_generated/students.pbgrpc.dart';
 
 class StudentService extends StudentServiceBase {
-  final List<Student> students = [];
+  StudentList students = StudentList();
 
   @override
   Future<ResponseMessage> createStudent(ServiceCall call, Student request) {
     try {
-      if (students.indexWhere((element) => element.id == request.id) == -1) {
-        students.add(request);
+      if (students.student.indexWhere((element) => element.id == request.id) ==
+          -1) {
+        students.student.add(request);
+
         return Future.value(
             ResponseMessage(message: "Student added successfully"));
       } else {
@@ -28,9 +32,10 @@ class StudentService extends StudentServiceBase {
       ServiceCall call, StudentId request) {
     try {
       int studentIndex =
-          students.indexWhere((element) => element.id == request.id);
+          students.student.indexWhere((element) => element.id == request.id);
       if (studentIndex != -1) {
-        students.removeAt(studentIndex);
+        students.student.removeAt(studentIndex);
+
         return Future.value(
             ResponseMessage(message: "Student removed successfully"));
       } else {
@@ -43,20 +48,20 @@ class StudentService extends StudentServiceBase {
   }
 
   @override
-  Future<SerachStudentResult> getStudentById(
+  Future<SearchStudentResult> getStudentById(
       ServiceCall call, StudentId request) {
     try {
       int studentIndex =
-          students.indexWhere((element) => element.id == request.id);
+          students.student.indexWhere((element) => element.id == request.id);
       if (studentIndex == -1) {
-        return Future.value(SerachStudentResult(
+        return Future.value(SearchStudentResult(
             message: "No student exist with id:${request.id}"));
       } else {
-        return Future.value(
-            SerachStudentResult(student: students.elementAt(studentIndex)));
+        return Future.value(SearchStudentResult(
+            student: students.student.elementAt(studentIndex)));
       }
     } catch (e) {
-      return Future.value(SerachStudentResult(message: "Error:$e"));
+      return Future.value(SearchStudentResult(message: "Error:$e"));
     }
   }
 
@@ -64,9 +69,9 @@ class StudentService extends StudentServiceBase {
   Future<ResponseMessage> updateStudent(ServiceCall call, Student request) {
     try {
       int studentIndex =
-          students.indexWhere((element) => element.id == request.id);
+          students.student.indexWhere((element) => element.id == request.id);
       if (studentIndex != -1) {
-        students[studentIndex] = request;
+        students.student[studentIndex] = request;
         return Future.value(
             ResponseMessage(message: "Updated student successfully"));
       } else {
@@ -77,12 +82,16 @@ class StudentService extends StudentServiceBase {
       return Future.value(ResponseMessage(message: "Error:$e"));
     }
   }
+
+  @override
+  Future<StudentList> getAllStudent(ServiceCall call, Empty request) async {
+    return students;
+  }
 }
 
 Future<void> main() async {
   final server = Server([StudentService()], const <Interceptor>[],
       CodecRegistry(codecs: const [GzipCodec(), IdentityCodec()]));
-  await server.serve(port: 5000);
-
-  print("Server started running");
+  await server.serve(port: 4325);
+  print('✅ Server listening on port ${server.port}...');
 }

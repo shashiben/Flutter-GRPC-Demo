@@ -3,11 +3,12 @@ syntax = "proto3";
 service StudentService{
     rpc createStudent(Student) returns(ResponseMessage){};
     rpc updateStudent(Student) returns(ResponseMessage){};
-    rpc getStudentById(StudentId) returns(SerachStudentResult){};
+    rpc getStudentById(StudentId) returns(SearchStudentResult){};
     rpc deleteStudentById(StudentId) returns(ResponseMessage){};
+    rpc getAllStudent(Empty) returns( StudentList){};
 
 }
-message SerachStudentResult{
+message SearchStudentResult{
     optional Student student = 1;
     optional string message=2;
 }
@@ -15,6 +16,7 @@ message Student{
     int32 id=1;
     string name=2;
     string dept=3;
+    string gender=4;
 }
 message Empty {}
 message ResponseMessage{
