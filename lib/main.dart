@@ -1,11 +1,11 @@
 // Flutter imports:
 import 'package:flutter/material.dart';
+import 'package:grpcassign/modules/dashboard%20module/screens/dashboard_view.dart';
 
 // Package imports:
 import 'package:http/http.dart' as http;
 
 // Project imports:
-import 'package:grpcassign/modules/add%20student%20module/screens/add_student_view.dart';
 
 void main() {
   runApp(const MyApp());
@@ -36,7 +36,7 @@ class MyApp extends StatelessWidget {
         primaryColor: const Color(0xFF353B40),
       ),
       debugShowCheckedModeBanner: false,
-      home: const AddStudentView(),
+      home: const DashboardView(),
     );
   }
 }

@@ -23,3 +23,6 @@ message ResponseMessage{
 message StudentId{
     int32 id=1;
 }
+message StudentList{
+    repeated Student student=1;
+}

@@ -23,6 +23,7 @@ class AddStudentView extends HookWidget {
     return Scaffold(
       backgroundColor: context.scaffoldBackgroundColor,
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         backgroundColor: context.primaryColor,
       ),
       body: SingleChildScrollView(
@@ -42,7 +43,9 @@ class AddStudentView extends HookWidget {
                     letterSpacing: 2,
                     fontWeight: FontWeight.w400),
               ),
-              onPressed: () {},
+              onPressed: () {
+                Navigator.pop(context);
+              },
             ),
             SizedBox(height: context.height * 0.02),
             ConstrainedBox(
