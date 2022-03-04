@@ -20,8 +20,8 @@ Future<void> main(List<String> args) async {
   final stub = StudentServiceClient(channel);
 
   try {
-    await stub.createStudent(Student(dept: "1", name: "Shashi", id: 1));
-    await stub.createStudent(Student(dept: "2", name: "Ramu", id: 2));
+    await stub.createStudent(Student(roomNo: "1", name: "Shashi", id: 1));
+    await stub.createStudent(Student(roomNo: "2", name: "Ramu", id: 2));
 
     debugPrint('Greeter client received:');
   } catch (e) {

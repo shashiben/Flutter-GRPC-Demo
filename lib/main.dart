@@ -1,15 +1,19 @@
 // Flutter imports:
 import 'package:flutter/material.dart';
+import 'package:grpcassign/app/locator.dart';
+import 'package:grpcassign/core/services/grpc_service.dart';
 
 // Package imports:
-import 'package:http/http.dart' as http;
 
 // Project imports:
 import 'package:grpcassign/modules/dashboard%20module/screens/dashboard_view.dart';
 
 // Project imports:
 
-void main() {
+Future main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await setupLocator();
+  await locator<GRPCService>().createChannel();
   runApp(const MyApp());
 }
 
@@ -39,38 +43,6 @@ class MyApp extends StatelessWidget {
       ),
       debugShowCheckedModeBanner: false,
       home: const DashboardView(),
-    );
-  }
-}
-
-class MyHomePage extends StatefulWidget {
-  const MyHomePage({Key? key, required this.title}) : super(key: key);
-
-  final String title;
-
-  @override
-  State<MyHomePage> createState() => _MyHomePageState();
-}
-
-class _MyHomePageState extends State<MyHomePage> {
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            ElevatedButton(
-                onPressed: () async {
-                  await http.get(Uri.parse("http://127.0.0.1:5000"));
-                },
-                child: const Text("Click Me"))
-          ],
-        ),
-      ),
     );
   }
 }

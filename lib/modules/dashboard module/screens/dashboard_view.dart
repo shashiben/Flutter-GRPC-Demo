@@ -69,6 +69,16 @@ class DashboardView extends HookWidget {
               },
               child: Text(error.value ?? ""),
             ),
+            NextAlert(
+              variant: NextVariant.info,
+              visible: isFetched.value && studentsList.value.isEmpty,
+              onClosedIconPressed: () {
+                error.value = null;
+              },
+              child: const Text(
+                "You haven't added any students, Click on above button to add some ",
+              ),
+            ),
             NextRow(
                 horizontalSpacing: 30,
                 children: List.generate(

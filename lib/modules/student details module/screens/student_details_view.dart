@@ -61,7 +61,7 @@ class StudentDetailsView extends HookWidget {
                             children: [
                               ...{
                                 "Name": student.name,
-                                "Department": student.dept,
+                                "Room No": student.roomNo,
                                 "Gender": student.gender
                               }
                                   .entries

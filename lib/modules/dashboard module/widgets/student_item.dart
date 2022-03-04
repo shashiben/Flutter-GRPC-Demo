@@ -46,7 +46,7 @@ class StudentItem extends StatelessWidget {
                 fontSize: 16, letterSpacing: 1, fontWeight: FontWeight.w600),
           ),
           Text(
-            student.dept,
+            student.roomNo,
             style: const TextStyle(
               fontSize: 12,
             ),

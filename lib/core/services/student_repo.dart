@@ -2,44 +2,22 @@
 import 'package:flutter/material.dart';
 
 // Package imports:
-import 'package:grpc/grpc.dart';
+import 'package:grpcassign/core/services/grpc_service.dart';
 
 // Project imports:
+import '../../app/locator.dart';
 import '../proto_generated/students.pbgrpc.dart';
 
 class StudentRepo {
+  final GRPCService _grpcService = locator<GRPCService>();
   Future createStudent(Student student) async {
-    final channel = ClientChannel(
-      'localhost',
-      port: 4325,
-      options: ChannelOptions(
-        credentials: const ChannelCredentials.insecure(),
-        codecRegistry:
-            CodecRegistry(codecs: const [GzipCodec(), IdentityCodec()]),
-      ),
-    );
-    debugPrint("Client Channel Created");
-    final stub = StudentServiceClient(channel);
-
-    var res = await stub.createStudent(student);
+    var res = await _grpcService.stub.createStudent(student);
     debugPrint("Result is:$res");
   }
 
-  getStudentList() async {
-    debugPrint("Started Getting student list");
-    final channel = ClientChannel(
-      'localhost',
-      port: 4325,
-      options: ChannelOptions(
-        credentials: const ChannelCredentials.insecure(),
-        codecRegistry:
-            CodecRegistry(codecs: const [GzipCodec(), IdentityCodec()]),
-      ),
-    );
-    debugPrint("Client Channel Created");
-    final stub = StudentServiceClient(channel);
+  Future getStudentList() async {
     try {
-      final updatedData = await stub.getAllStudent(Empty());
+      final updatedData = await _grpcService.stub.getAllStudent(Empty());
       debugPrint("Updated student list is:${updatedData.student}");
       return updatedData.student;
     } catch (e) {
@@ -48,38 +26,14 @@ class StudentRepo {
   }
 
   Future updateStudent(Student student) async {
-    final channel = ClientChannel(
-      'localhost',
-      port: 4325,
-      options: ChannelOptions(
-        credentials: const ChannelCredentials.insecure(),
-        codecRegistry:
-            CodecRegistry(codecs: const [GzipCodec(), IdentityCodec()]),
-      ),
-    );
     debugPrint("Client Channel Created");
-    final stub = StudentServiceClient(channel);
 
-    var res = await stub.updateStudent(student);
+    var res = await _grpcService.stub.updateStudent(student);
     debugPrint("Result is:$res");
   }
 
   Future deleteStudent(int id) async {
-    final channel = ClientChannel(
-      'localhost',
-      port: 4325,
-      options: ChannelOptions(
-        credentials: const ChannelCredentials.insecure(),
-        codecRegistry: CodecRegistry(codecs: const [
-          GzipCodec(),
-          IdentityCodec(),
-        ]),
-      ),
-    );
-    debugPrint("Client Channel Created");
-    final stub = StudentServiceClient(channel);
-
-    var res = await stub.deleteStudentById(
+    var res = await _grpcService.stub.deleteStudentById(
       StudentId(id: id),
     );
     debugPrint("Result is:$res");

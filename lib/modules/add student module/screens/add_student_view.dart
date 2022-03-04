@@ -1,5 +1,6 @@
 // Flutter imports:
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 // Package imports:
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -24,8 +25,8 @@ class AddStudentView extends HookWidget {
         text: student != null ? student?.id.toString() : "");
     final nameController = useTextEditingController(
         text: student != null ? student?.name.toString() : "");
-    final deptController = useTextEditingController(
-        text: student != null ? student?.dept.toString() : "");
+    final roomNoController = useTextEditingController(
+        text: student != null ? student?.roomNo.toString() : "");
 
     return Scaffold(
       backgroundColor: context.scaffoldBackgroundColor,
@@ -84,14 +85,17 @@ class AddStudentView extends HookWidget {
                       enabled: student == null,
                       title: "ID",
                       controller: idController,
+                      keyboardType: TextInputType.number,
+                      inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                     ),
                     CommonTextField(
                       title: "Name",
+                      keyboardType: TextInputType.name,
                       controller: nameController,
                     ),
                     CommonTextField(
                       title: "Department",
-                      controller: deptController,
+                      controller: roomNoController,
                     ),
                     CommonDropdown<String>(
                         value: gender.value,
@@ -103,11 +107,12 @@ class AddStudentView extends HookWidget {
                     NextButton(
                       borderRadius: BorderRadius.circular(2),
                       onPressed: () {
-                        if (idController.text.trim().isEmpty) {
+                        if (idController.text.trim().isEmpty &&
+                            int.tryParse(idController.text) != null) {
                           error.value = "Please enter id";
                         } else if (nameController.text.trim().isEmpty) {
                           error.value = "Please enter name";
-                        } else if (deptController.text.trim().isEmpty) {
+                        } else if (roomNoController.text.trim().isEmpty) {
                           error.value = "Please enter dept";
                         } else if (gender.value == null) {
                           error.value = "Please choose gender";
@@ -119,7 +124,7 @@ class AddStudentView extends HookWidget {
                                 .updateStudent(Student(
                                     name: nameController.text,
                                     id: int.tryParse(idController.text),
-                                    dept: deptController.text,
+                                    roomNo: roomNoController.text,
                                     gender: gender.value))
                                 .then((value) {
                               Navigator.pushAndRemoveUntil(
@@ -133,7 +138,7 @@ class AddStudentView extends HookWidget {
                                 .createStudent(Student(
                                     name: nameController.text,
                                     id: int.tryParse(idController.text),
-                                    dept: deptController.text,
+                                    roomNo: roomNoController.text,
                                     gender: gender.value))
                                 .then((value) {
                               Navigator.pop(context);

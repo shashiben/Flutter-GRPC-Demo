@@ -15,7 +15,7 @@ message SearchStudentResult{
 message Student{
     int32 id=1;
     string name=2;
-    string dept=3;
+    string roomNo=3;
     string gender=4;
 }
 message Empty {}
