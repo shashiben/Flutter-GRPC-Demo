@@ -40,7 +40,7 @@ class DashboardView extends HookWidget {
           decoration: BoxDecoration(color: context.scaffoldBackgroundColor),
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SizedBox(height: context.height * 0.06),
+            SizedBox(height: context.height * 0.04),
             Align(
               alignment: Alignment.centerLeft,
               child: Text(
@@ -80,7 +80,7 @@ class DashboardView extends HookWidget {
               ),
             ),
             NextRow(
-                horizontalSpacing: 30,
+                horizontalSpacing: context.isMobile ? 20 : 30,
                 children: List.generate(
                     studentsList.value.length,
                     (index) => NextCol(

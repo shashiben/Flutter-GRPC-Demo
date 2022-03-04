@@ -21,7 +21,8 @@ class StudentDetailsView extends HookWidget {
       ignoring: isLoading.value,
       child: Scaffold(
         appBar: AppBar(
-          toolbarHeight: 80,
+          title: Text(student.name),
+          toolbarHeight: context.isMobile ? kToolbarHeight : 80,
           backgroundColor: context.primaryColor,
         ),
         body: SingleChildScrollView(
@@ -85,7 +86,7 @@ class StudentDetailsView extends HookWidget {
                                       ))
                                   .toList(),
                               NextButton(
-                                      borderRadius: BorderRadius.circular(4),
+                                      borderRadius: BorderRadius.circular(0),
                                       onPressed: () {
                                         context.navigator
                                             .push(MaterialPageRoute(
