@@ -1,9 +1,11 @@
 // Flutter imports:
 import 'package:flutter/material.dart';
-import 'package:grpcassign/modules/dashboard%20module/screens/dashboard_view.dart';
 
 // Package imports:
 import 'package:http/http.dart' as http;
+
+// Project imports:
+import 'package:grpcassign/modules/dashboard%20module/screens/dashboard_view.dart';
 
 // Project imports:
 
@@ -17,7 +19,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'GRPC Demo',
       theme: ThemeData(
         textButtonTheme: TextButtonThemeData(
             style: ButtonStyle(

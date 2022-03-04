@@ -1,7 +1,11 @@
+// Flutter imports:
 import 'package:flutter/material.dart';
+
+// Package imports:
 import 'package:flutter_next/flutter_next.dart';
 import 'package:flutter_next/utils/shadows/next_shadow.dart';
 
+// Project imports:
 import '../../../core/proto_generated/students.pb.dart';
 import '../../student details module/screens/student_details_view.dart';
 
