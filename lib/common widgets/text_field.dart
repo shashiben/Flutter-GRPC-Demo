@@ -4,7 +4,9 @@ import 'package:flutter/material.dart';
 class CommonTextField extends StatelessWidget {
   final TextEditingController? controller;
   final String title;
-  const CommonTextField({Key? key, this.controller, required this.title})
+  final bool enabled;
+  const CommonTextField(
+      {Key? key, this.controller, required this.title, this.enabled = true})
       : super(key: key);
 
   @override
@@ -16,6 +18,7 @@ class CommonTextField extends StatelessWidget {
           height: 8,
         ),
         TextFormField(
+          enabled: enabled,
           controller: controller,
           decoration: InputDecoration(hintText: "Enter ${title.toLowerCase()}"),
         ),

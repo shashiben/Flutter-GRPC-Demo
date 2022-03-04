@@ -5,15 +5,33 @@ import 'package:flutter/material.dart';
 // Package imports:
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:flutter_next/flutter_next.dart';
-import 'package:flutter_next/utils/shadows/next_shadow.dart';
+import 'package:grpcassign/core/services/student_repo.dart';
 import 'package:grpcassign/modules/add%20student%20module/screens/add_student_view.dart';
-import 'package:grpcassign/modules/student%20details%20module/screens/student_details_view.dart';
+import 'package:grpcassign/modules/dashboard%20module/widgets/student_item.dart';
+
+import '../../../core/proto_generated/students.pb.dart';
 
 class DashboardView extends HookWidget {
   const DashboardView({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    final isFetched = useState(false);
+    final error = useState<String?>(null);
+    final studentsList = useState<List<Student>>(<Student>[]);
+    useEffect(() {
+      if (!isFetched.value) {
+        StudentRepo().getStudentList().then((value) {
+          isFetched.value = true;
+          if (value is List) {
+            studentsList.value = value as List<Student>;
+          } else if (value is String) {
+            error.value = value;
+          }
+        });
+      }
+      return;
+    }, [isFetched.value]);
     return Scaffold(
       body: SingleChildScrollView(
         child: NextContainer(
@@ -33,70 +51,35 @@ class DashboardView extends HookWidget {
                 ),
               ).paddingSymmetric(horizontal: 0, vertical: 16),
             ),
+            AnimatedSwitcher(
+              duration: const Duration(milliseconds: 600),
+              child: !isFetched.value
+                  ? CircularProgressIndicator(
+                      color: context.primaryColor,
+                    ).center()
+                  : const SizedBox(),
+            ),
+            NextAlert(
+              variant: NextVariant.danger,
+              visible: error.value != null,
+              onClosedIconPressed: () {
+                error.value = null;
+              },
+              child: Text(error.value ?? ""),
+            ),
             NextRow(
                 horizontalSpacing: 30,
                 children: List.generate(
-                    10,
+                    studentsList.value.length,
                     (index) => NextCol(
-                          sizes:
-                              "col-12 col-xl-3 col-lg-3 col-md-4 col-sm-6 col-xs-12",
-                          child: HoverWidget(builder: (context, isHovered) {
-                            return Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Container(
-                                  height: 150,
-                                  child: Hero(
-                                    tag: "ProfilePic$index",
-                                    child: Image.asset(
-                                      index % 3 == 0
-                                          ? "assets/images/female.png"
-                                          : "assets/images/male.png",
-                                      fit: BoxFit.contain,
-                                    ),
-                                  ).clipRRect(all: 8),
-                                  width: double.infinity,
-                                  decoration: BoxDecoration(
-                                      color: Colors.black,
-                                      borderRadius: BorderRadius.circular(8)),
-                                ),
-                                const SizedBox(
-                                  height: 12,
-                                ),
-                                const Text(
-                                  "Shashi Kumar",
-                                  style: TextStyle(
-                                      fontSize: 16,
-                                      letterSpacing: 1,
-                                      fontWeight: FontWeight.w600),
-                                ),
-                                const Text(
-                                  "B.Tech",
-                                  style: TextStyle(
-                                    fontSize: 12,
-                                  ),
-                                ),
-                              ],
-                            )
-                                .pad(12)
-                                .container(
-                                    animationDuration:
-                                        const Duration(milliseconds: 600),
-                                    shouldAnimate: true,
-                                    decoration: BoxDecoration(
-                                        boxShadow: isHovered
-                                            ? NextShadow.shadow400()
-                                            : null,
-                                        color: context.scaffoldBackgroundColor,
-                                        border: Border.all(
-                                            color: const Color(0xFF55595c),
-                                            width: 0.1)))
-                                .onTap(() {
-                              context.navigator.push(MaterialPageRoute(
-                                  builder: (_) => const StudentDetailsView()));
-                            });
-                          }),
-                        )).toList()),
+                        sizes:
+                            "col-12 col-xl-3 col-lg-3 col-md-4 col-sm-6 col-xs-12",
+                        child: StudentItem(
+                          refreshFunction: () {
+                            isFetched.value = false;
+                          },
+                          student: studentsList.value.elementAt(index),
+                        ))).toList()),
             const SizedBox(
               height: 30,
             )
@@ -127,9 +110,10 @@ class DashboardView extends HookWidget {
                           fontSize: 16,
                           fontWeight: FontWeight.w400),
                     ),
-              onPressed: () {
-                Navigator.push(context,
+              onPressed: () async {
+                await Navigator.push(context,
                     MaterialPageRoute(builder: (_) => const AddStudentView()));
+                isFetched.value = false;
               },
             ),
           ),

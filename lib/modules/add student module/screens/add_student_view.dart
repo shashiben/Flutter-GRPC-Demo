@@ -9,19 +9,24 @@ import 'package:flutter_next/flutter_next.dart';
 import 'package:grpcassign/common%20widgets/dropdown.dart';
 import 'package:grpcassign/common%20widgets/text_field.dart';
 import 'package:grpcassign/core/services/student_repo.dart';
+import 'package:grpcassign/modules/dashboard%20module/screens/dashboard_view.dart';
 
 import '../../../core/proto_generated/students.pb.dart';
 
 class AddStudentView extends HookWidget {
-  const AddStudentView({Key? key}) : super(key: key);
+  final Student? student;
+  const AddStudentView({Key? key, this.student}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final gender = useState<String?>(null);
+    final gender = useState<String?>(student?.gender);
     final error = useState<String?>(null);
-    final idController = useTextEditingController();
-    final nameController = useTextEditingController();
-    final deptController = useTextEditingController();
+    final idController = useTextEditingController(
+        text: student != null ? student?.id.toString() : "");
+    final nameController = useTextEditingController(
+        text: student != null ? student?.name.toString() : "");
+    final deptController = useTextEditingController(
+        text: student != null ? student?.dept.toString() : "");
 
     return Scaffold(
       backgroundColor: context.scaffoldBackgroundColor,
@@ -56,7 +61,8 @@ class AddStudentView extends HookWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      "Add Student".toUpperCase(),
+                      "${student == null ? "Add" : "Update"} Student"
+                          .toUpperCase(),
                       style: TextStyle(
                         letterSpacing: 1.3,
                         fontSize: context.height * 0.04,
@@ -76,6 +82,7 @@ class AddStudentView extends HookWidget {
                       child: Text(error.value ?? ""),
                     ).customPadding(bottom: 8),
                     CommonTextField(
+                      enabled: student == null,
                       title: "ID",
                       controller: idController,
                     ),
@@ -108,16 +115,36 @@ class AddStudentView extends HookWidget {
                         } else {
                           debugPrint("Form is validated");
                           error.value = null;
-                          StudentRepo().createStudent(Student(
-                              name: nameController.text,
-                              id: int.tryParse(idController.text),
-                              dept: deptController.text,
-                              gender: gender.value));
+                          if (student != null) {
+                            StudentRepo()
+                                .updateStudent(Student(
+                                    name: nameController.text,
+                                    id: int.tryParse(idController.text),
+                                    dept: deptController.text,
+                                    gender: gender.value))
+                                .then((value) {
+                              Navigator.pushAndRemoveUntil(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (_) => const DashboardView()),
+                                  (_) => false);
+                            });
+                          } else {
+                            StudentRepo()
+                                .createStudent(Student(
+                                    name: nameController.text,
+                                    id: int.tryParse(idController.text),
+                                    dept: deptController.text,
+                                    gender: gender.value))
+                                .then((value) {
+                              Navigator.pop(context);
+                            });
+                          }
                         }
                       },
-                      child: const Text(
-                        "Add Student",
-                        style: TextStyle(color: Colors.white),
+                      child: Text(
+                        "${student == null ? "Add" : "Update"} Student",
+                        style: const TextStyle(color: Colors.white),
                       ),
                     )
                   ]),

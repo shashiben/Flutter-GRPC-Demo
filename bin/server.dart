@@ -1,5 +1,6 @@
 // Package imports:
 import 'dart:async';
+import 'dart:developer';
 
 import 'package:grpc/grpc.dart';
 
@@ -93,5 +94,5 @@ Future<void> main() async {
   final server = Server([StudentService()], const <Interceptor>[],
       CodecRegistry(codecs: const [GzipCodec(), IdentityCodec()]));
   await server.serve(port: 4325);
-  print('✅ Server listening on port ${server.port}...');
+  log('✅ Server listening on port ${server.port}...');
 }

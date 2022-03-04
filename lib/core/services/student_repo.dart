@@ -19,8 +19,6 @@ class StudentRepo {
 
     var res = await stub.createStudent(student);
     debugPrint("Result is:$res");
-    await channel.shutdown();
-    getStudentList();
   }
 
   getStudentList() async {
@@ -39,8 +37,47 @@ class StudentRepo {
     try {
       final updatedData = await stub.getAllStudent(Empty());
       debugPrint("Updated student list is:${updatedData.student}");
+      return updatedData.student;
     } catch (e) {
-      debugPrint("Error in getting student list is:$e");
+      return "$e";
     }
+  }
+
+  Future updateStudent(Student student) async {
+    final channel = ClientChannel(
+      'localhost',
+      port: 4325,
+      options: ChannelOptions(
+        credentials: const ChannelCredentials.insecure(),
+        codecRegistry:
+            CodecRegistry(codecs: const [GzipCodec(), IdentityCodec()]),
+      ),
+    );
+    debugPrint("Client Channel Created");
+    final stub = StudentServiceClient(channel);
+
+    var res = await stub.updateStudent(student);
+    debugPrint("Result is:$res");
+  }
+
+  Future deleteStudent(int id) async {
+    final channel = ClientChannel(
+      'localhost',
+      port: 4325,
+      options: ChannelOptions(
+        credentials: const ChannelCredentials.insecure(),
+        codecRegistry: CodecRegistry(codecs: const [
+          GzipCodec(),
+          IdentityCodec(),
+        ]),
+      ),
+    );
+    debugPrint("Client Channel Created");
+    final stub = StudentServiceClient(channel);
+
+    var res = await stub.deleteStudentById(
+      StudentId(id: id),
+    );
+    debugPrint("Result is:$res");
   }
 }
